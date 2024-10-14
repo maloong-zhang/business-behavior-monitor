@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ae.zerotone.monitor.infrastructure.dao.IMonitorDataMapNodeDao">
+
+    <resultMap id="dataMap" type="ae.zerotone.monitor.infrastructure.po.MonitorDataMapNode">
+        <id column="id" property="id"/>
+        <result column="monitor_id" property="monitorId"/>
+        <result column="monitor_node_id" property="monitorNodeId"/>
+        <result column="monitor_node_name" property="monitorNodeName"/>
+        <result column="gather_system_name" property="gatherSystemName"/>
+        <result column="gather_clazz_name" property="gatherClazzName"/>
+        <result column="gather_method_name" property="gatherMethodName"/>
+        <result column="loc" property="loc"/>
+        <result column="color" property="color"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="queryMonitoryDataMapNodeList" parameterType="ae.zerotone.monitor.infrastructure.po.MonitorDataMapNode"
+            resultMap="dataMap">
+        select monitor_id, monitor_node_id, gather_system_name, gather_clazz_name, gather_method_name
+        from monitor_data_map_node
+        where gather_system_name = #{gatherSystemName}
+          and gather_clazz_name = #{gatherClazzName}
+          and gather_method_name
+            = #{gatherMethodName}
+    </select>
+
+    <select id="queryMonitorNodeConfigByMonitorId" parameterType="java.lang.String" resultMap="dataMap">
+        select monitor_node_id, monitor_node_name, loc, color
+        from monitor_data_map_node
+        where monitor_id = #{monitorId}
+    </select>
+
+    <update id="updateNodeConfig" parameterType="ae.zerotone.monitor.infrastructure.po.MonitorDataMapNode">
+        update monitor_data_map_node
+        set loc = #{loc}
+        where monitor_id = #{monitorId}
+          and monitor_node_id = #{monitorNodeId}
+    </update>
+
+
+</mapper>

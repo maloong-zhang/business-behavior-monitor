@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ae.zerotone.monitor.infrastructure.dao.IMonitorDataMapNodeLinkDao">
+
+    <resultMap id="dataMap" type="ae.zerotone.monitor.infrastructure.po.MonitorDataMapNodeLink">
+        <id column="id" property="id"/>
+        <result column="monitor_id" property="monitorId"/>
+        <result column="from_monitor_node_id" property="fromMonitorNodeId"/>
+        <result column="to_monitor_node_id" property="toMonitorNodeId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="queryMonitorNodeLinkConfigByMonitorId" parameterType="java.lang.String" resultMap="dataMap">
+        select id, from_monitor_node_id, to_monitor_node_id
+        from monitor_data_map_node_link
+        where monitor_id = #{monitorId}
+    </select>
+
+    <delete id="deleteLinkFromByMonitorId" parameterType="java.lang.String">
+        delete
+        from monitor_data_map_node_link
+        where monitor_id = #{monitorId}
+    </delete>
+
+    <insert id="insert" parameterType="ae.zerotone.monitor.infrastructure.po.MonitorDataMapNodeLink">
+        insert into monitor_data_map_node_link(monitor_id, from_monitor_node_id, to_monitor_node_id)
+        values (#{monitorId}, #{fromMonitorNodeId}, #{toMonitorNodeId})
+    </insert>
+
+</mapper>

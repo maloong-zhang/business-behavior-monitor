@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ae.zerotone.monitor.infrastructure.dao.IMonitorDataDao">
+
+    <resultMap id="dataMap" type="ae.zerotone.monitor.infrastructure.po.MonitorData">
+        <id column="id" property="id"/>
+        <result column="monitor_id" property="monitorId"/>
+        <result column="monitor_name" property="monitorName"/>
+        <result column="monitor_node_id" property="monitorNodeId"/>
+        <result column="system_name" property="systemName"/>
+        <result column="clazz_name" property="clazzName"/>
+        <result column="method_name" property="methodName"/>
+        <result column="attribute_name" property="attributeName"/>
+        <result column="attribute_field" property="attributeField"/>
+        <result column="attribute_value" property="attributeValue"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="ae.zerotone.monitor.infrastructure.po.MonitorData">
+        insert into monitor_data(monitor_id, monitor_name, monitor_node_id, system_name, clazz_name, method_name,
+                                 attribute_name, attribute_field, attribute_value, create_time, update_time)
+        values (#{monitorId}, #{monitorName}, #{monitorNodeId}, #{systemName}, #{clazzName}, #{methodName},
+                #{attributeName}, #{attributeField}, #{attributeValue}, now(), now())
+    </insert>
+
+    <select id="queryMonitorDataList" parameterType="ae.zerotone.monitor.infrastructure.po.MonitorData"
+            resultMap="dataMap">
+        select monitor_id, monitor_name, monitor_node_id, system_name, clazz_name, method_name,
+        attribute_name, attribute_field, attribute_value
+        from monitor_data
+        <where>
+            <if test="monitorId!=null">
+                and monitor_id = #{monitorId}
+            </if>
+            <if test="monitorName!=null">
+                and monitor_name = #{monitorName}
+            </if>
+            <if test="monitorNodeId!=null">
+                and monitor_node_id = #{monitorNodeId}
+            </if>
+        </where>
+        order by id desc
+        limit 50
+    </select>
+
+
+</mapper>

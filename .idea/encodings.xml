@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/business-behavior-monitor-admin/src/assemble/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/business-behavior-monitor-admin/src/assembly/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/business-behavior-monitor-admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/business-behavior-monitor-admin/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/business-behavior-monitor-sdk/src/assemble/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/business-behavior-monitor-sdk/src/assembly/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/business-behavior-monitor-sdk/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/business-behavior-monitor-sdk/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/business-behavior-monitor-test/src/assemble/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/business-behavior-monitor-test/src/assembly/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/business-behavior-monitor-test/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/business-behavior-monitor-test/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/assemble/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/assembly/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

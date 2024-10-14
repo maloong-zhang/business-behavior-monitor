@@ -1,0 +1,22 @@
+24-10-14.01:47:22.111 [main            ] INFO  Version                - Redisson 3.26.0
+24-10-14.01:47:22.178 [main            ] WARN  DnsServerAddressStreamProviders - Can not find io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'
+24-10-14.01:47:21.558 [main            ] INFO  ApiTest                - Starting ApiTest using Java 1.8.0_311 on andyings-MacBook-Pro.local with PID 13153 (started by andying in /Users/andying/github/maloong-zhang/business-behavior-monitor/business-behavior-monitor-test)
+24-10-14.01:47:28.602 [main            ] INFO  Version                - Redisson 3.26.0
+24-10-14.01:47:28.570 [main            ] INFO  ApiTest                - The following 1 profile is active: "dev"
+24-10-14.01:47:32.090 [main            ] INFO  Version                - Redisson 3.26.0
+24-10-14.01:47:32.066 [main            ] INFO  ApiTest                - Started ApiTest in 11.319 seconds (JVM running for 12.767)
+24-10-14.01:47:35.760 [main            ] INFO  Version                - Redisson 3.26.0
+24-10-14.01:47:35.741 [main            ] INFO  ApiTest                - 测试日志 10001 李二狗 {"orderId":"109099893222","userAge":25,"userId":"10001","userName":"李二狗"}
+24-10-14.02:00:18.562 [main            ] INFO  Version                - Redisson 3.26.0
+24-10-14.02:00:18.630 [main            ] WARN  DnsServerAddressStreamProviders - Can not find io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'
+24-10-14.02:00:18.066 [main            ] INFO  ApiTest                - Starting ApiTest using Java 1.8.0_311 on andyings-MacBook-Pro.local with PID 13645 (started by andying in /Users/andying/github/maloong-zhang/business-behavior-monitor/business-behavior-monitor-test)
+24-10-14.02:00:18.889 [redisson-netty-1-23] INFO  ConnectionsHolder      - 10 connections initialized for 192.168.31.251/192.168.31.251:16379
+24-10-14.02:00:18.871 [redisson-netty-1-10] INFO  ConnectionsHolder      - 1 connections initialized for 192.168.31.251/192.168.31.251:16379
+24-10-14.02:00:18.987 [main            ] INFO  ApiTest                - The following 1 profile is active: "dev"
+24-10-14.02:00:19.307 [main            ] INFO  ApiTest                - Started ApiTest in 1.981 seconds (JVM running for 3.269)
+24-10-14.02:00:19.704 [main            ] INFO  ApiTest                - 测试日志开始 10001 李二狗 {"orderId":"109099893222","userAge":25,"userId":"10001","userName":"李二狗"}
+24-10-14.02:00:19.765 [main            ] INFO  ApiTest                - 测试日志-加载xxx资源 10001 李二狗 {"orderId":"109099893222","userAge":25,"userId":"10001","userName":"李二狗"}
+24-10-14.02:00:19.770 [main            ] INFO  ApiTest                - 测试日志失败 10001 李二狗 {"orderId":"109099893222","userAge":25,"userId":"10001","userName":"李二狗"}
+24-10-14.02:00:19.819 [redisson-3-12   ] INFO  RedisPush              - 接收消息：{"className":"com.zerotone.test.ApiTest","logList":["测试日志开始","10001","李二狗","{\"orderId\":\"109099893222\",\"userAge\":25,\"userId\":\"10001\",\"userName\":\"李二狗\"}"],"methodName":"test_log_01","systemName":"marketo"}
+24-10-14.02:00:19.820 [redisson-3-12   ] INFO  RedisPush              - 接收消息：{"className":"com.zerotone.test.ApiTest","logList":["测试日志-加载xxx资源","10001","李二狗","{\"orderId\":\"109099893222\",\"userAge\":25,\"userId\":\"10001\",\"userName\":\"李二狗\"}"],"methodName":"test_log_01","systemName":"marketo"}
+24-10-14.02:00:19.820 [redisson-3-12   ] INFO  RedisPush              - 接收消息：{"className":"com.zerotone.test.ApiTest","logList":["测试日志失败","10001","李二狗","{\"orderId\":\"109099893222\",\"userAge\":25,\"userId\":\"10001\",\"userName\":\"李二狗\"}"],"methodName":"test_log_01","systemName":"marketo"}

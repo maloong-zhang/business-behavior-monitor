@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>监控图</title>
+    <meta content="" name="description"/>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/layer/layer.js"></script>
+    <script src="js/go.js"></script>
+    <script src="js/flow-desinger.js"></script>
+    <script src="js/flow-display.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        #header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        #container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #monitorDisplayPanel {
+            border: solid 1px black;
+            width: 100%;
+            height: 500px;
+            margin-bottom: 20px;
+        }
+
+        #btnSave {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #btnSave:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+<div id="header">
+    <i class="fas fa-chart-line"></i> 监控图
+</div>
+<div id="container">
+    <div id="monitorDisplayPanel"></div>
+    <button id="btnSave">保存设计图</button>
+</div>
+
+<script type="text/javascript">
+    var monitorFlow = new FlowDesigner('monitorDisplayPanel');
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // 获取当前页面的 URL
+        var currentUrl = new URL(window.location.href);
+        // 从 URL 中提取 monitorId 参数
+        var monitorId = currentUrl.searchParams.get('monitorId');
+        if (!monitorId) {
+            console.error('monitorId 参数未找到');
+            return;
+        }
+
+        function fetchData() {
+            fetch(`http://localhost:8099/api/v1/monitor/query_monitor_flow_map?monitorId=${monitorId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === "0000") {
+                        monitorFlow.displayFlow(data.data);
+                    } else {
+                        console.error('Error in response:', data.info);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading data:', error);
+                });
+        }
+
+        fetchData();
+
+        $('#btnSave').on('click', function () {
+            fetch(`http://localhost:8099/api/v1/monitor/update_monitor_flow_designer?monitorId=${monitorId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: monitorFlow.getFlowData()
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.code === '0000') {
+                        console.log('请求成功:', result);
+                        console.info('更新成功')
+                    } else {
+                        console.log('请求失败:', result);
+                    }
+                })
+                .catch(error => {
+                    console.error('请求出错:', error);
+                });
+        });
+    });
+
+</script>
+
+</body>
+</html>

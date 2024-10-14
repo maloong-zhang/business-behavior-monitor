@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>业务监控图</title>
+    <meta content="" name="description"/>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/layer/layer.js"></script>
+    <script src="js/go.js"></script>
+    <script src="js/flow-desinger.js"></script>
+    <script src="js/flow-display.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        #header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 24px;
+            position: fixed; /* 固定位置 */
+            top: 0; /* 距离顶部 0 */
+            left: 0; /* 距离左边 0 */
+            width: 100%; /* 宽度 100% */
+            z-index: 1000; /* 确保在其他内容之上 */
+        }
+
+        #container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #999999;
+        }
+
+        #monitorDisplayPanel {
+            border: solid 1px black;
+            width: 100%;
+            height: 500px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        input[type="text"] {
+            margin-right: 10px;
+            padding: 5px;
+        }
+
+        button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* 添加样式以固定侧边栏 */
+        #sidebar {
+            position: fixed;
+            width: 200px;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto;
+            background-color: #f0f0f0;
+            padding: 20px;
+            margin-top: 60px;
+        }
+
+        #container {
+            margin-left: 250px; /* 侧边栏宽度加上一些间隙 */
+        }
+
+    </style>
+</head>
+
+<body>
+<div id="header">
+    <i class="fas fa-chart-line"></i> 监控图
+</div>
+<div style="height: 50px;"></div>
+
+<div id="sidebar">
+    <h2>监控场景列表</h2>
+    <ul id="sceneList" style="cursor:pointer;">
+        <!-- 场景列表将被插入到这里 -->
+    </ul>
+</div>
+
+<div id="container">
+    <div>
+        <h1>监控地图</h1>
+        <div id="monitorDisplayPanel"></div>
+        <button id="update">更新流程图</button>
+    </div>
+
+    <div>
+        <h1>监控数据</h1>
+        <form id="searchForm">
+            <label for="monitorId">监控ID:</label>
+            <input id="monitorId" name="monitorId" type="text">
+            <label for="monitorName">监控名称:</label>
+            <input id="monitorName" name="monitorName" type="text">
+            <label for="monitorNodeId">节点ID:</label>
+            <input id="monitorNodeId" name="monitorNodeId" type="text">
+            <button type="submit">搜索</button>
+        </form>
+        <table id="dataTable">
+            <thead>
+            <tr>
+                <th>监控ID</th>
+                <th>监控名称</th>
+                <th>节点ID</th>
+                <th>系统名称</th>
+                <th>类的名称</th>
+                <th>方法名称</th>
+                <th>属性名称</th>
+                <th>属性字段</th>
+                <th>属性的值</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 数据行将被插入到这里 -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var monitorFlow = new FlowDesigner('monitorDisplayPanel');
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // 查询侧边栏
+        fetchSceneList();
+
+        // 获取当前页面的 URL
+        var currentUrl = new URL(window.location.href);
+        // 从 URL 中提取 monitorId 参数
+        var monitorId = currentUrl.searchParams.get('monitorId');
+
+        if (!monitorId) {
+            console.error('monitorId 参数未找到');
+            return;
+        }
+
+        // Initial fetch
+        fetchData(monitorId);
+
+        // Set interval to fetch data every 5 seconds
+        setInterval(() => fetchData(monitorId), 5000);
+
+        // Fetch initial monitor data
+        fetchMonitorData(monitorId);
+
+        // Add event listener for the search form
+        document.getElementById('searchForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const monitorId = document.getElementById('monitorId').value;
+            const monitorName = document.getElementById('monitorName').value;
+            const monitorNodeId = document.getElementById('monitorNodeId').value;
+
+            fetchMonitorData(monitorId, monitorName, monitorNodeId);
+        });
+
+        document.getElementById('update').addEventListener('click', function (event) {
+            window.open("update.html?monitorId=" + monitorId, '_blank');
+        });
+    });
+
+    function fetchData(monitorId) {
+        fetch(`http://localhost:8099/api/v1/monitor/query_monitor_flow_map?monitorId=${monitorId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === "0000") {
+                    monitorFlow.displayFlow(data.data);
+                } else {
+                    console.error('Error in response:', data.info);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading data:', error);
+            });
+    }
+
+    function fetchSceneList() {
+        fetch('http://localhost:8099/api/v1/monitor/query_monitor_data_map_entity_list')
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === '0000') {
+                    const sceneList = document.getElementById('sceneList');
+                    sceneList.innerHTML = ''; // 清空列表
+                    data.data.forEach(item => {
+                        const listItem = document.createElement('li');
+                        listItem.innerText = item.monitorName;
+                        listItem.dataset.monitorId = item.monitorId;
+                        listItem.addEventListener('click', function () {
+                            // 使用 window.location.assign 实现页面跳转
+                            window.location.assign(`index.html?monitorId=${this.dataset.monitorId}`);
+                        });
+                        sceneList.appendChild(listItem);
+                    });
+                } else {
+                    console.error('Error in response:', data.info);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading scene list:', error);
+            });
+    }
+
+    function fetchMonitorData(monitorId, monitorName = '', monitorNodeId = '') {
+        fetch(`http://localhost:8099/api/v1/monitor/query_monitor_data_list?monitorId=${monitorId}&monitorName=${monitorName}&monitorNodeId=${monitorNodeId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === '0000') {
+                    const tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+                    tableBody.innerHTML = ''; // 清空表格
+                    data.data.forEach(item => {
+                        const row = tableBody.insertRow();
+                        row.insertCell(0).innerText = item.monitorId;
+                        row.insertCell(1).innerText = item.monitorName;
+                        row.insertCell(2).innerText = item.monitorNodeId;
+                        row.insertCell(3).innerText = item.systemName;
+                        row.insertCell(4).innerText = item.clazzName;
+                        row.insertCell(5).innerText = item.methodName;
+                        row.insertCell(6).innerText = item.attributeName;
+                        row.insertCell(7).innerText = item.attributeField;
+                        row.insertCell(8).innerText = item.attributeValue;
+                    });
+                } else {
+                    alert('查询失败，错误代码：' + data.code);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('查询失败，请检查网络连接或联系管理员。');
+            });
+    }
+</script>
+
+</body>
+
+</html>
